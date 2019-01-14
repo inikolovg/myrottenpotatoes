@@ -1,6 +1,22 @@
 class MoviesController < ApplicationController
  def index
  @movies = Movie.all
+ sort = params[:sort]
+ case sort
+ when 'title'
+  ordering,@title_header = {:title => :asc}, 'hilite'
+ when 'release_date'      
+  ordering,@date_header = {:release_date => :asc}, 'hilite'
+ @all_ratings = Movie.all_ratings  
+ @selected_ratings = params[:ratings]|| {}
+ 
+ if @selected_ratings == {}  
+   @selected_ratings = Hash[@all_ratings.map {|rating| [rating, rating]}]
+ end
+ @movies = Movie.where(rating: @selected_ratings.keys).order(ordering)
+ 
+ @movies = Movie.order(ordering)
+ end
  end
  def show
   id = params[:id] # retrieve movie ID from URI route
