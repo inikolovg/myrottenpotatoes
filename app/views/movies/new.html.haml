@@ -1,7 +1,6 @@
 %h2 Create New Movie
 
 = form_tag movies_path, :method => :post do
-= form_tag movie_path(@movie), :method => :put do
  
   - unless @movie.errors.empty?
     #warning

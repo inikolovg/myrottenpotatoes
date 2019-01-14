@@ -31,9 +31,12 @@ class MoviesController < ApplicationController
   @movie = Movie.find params[:id]
   params.require(:movie)
   permitted = params[:movie].permit(:title,:rating,:release_date)
-  @movie.update_attributes!(permitted)
-  flash[:notice] = "#{@movie.title} was successfully updated."
-  redirect_to movie_path(@movie)
+  if @movie.update_attributes(permitted)
+    flash[:notice] = "#{@movie.title} was successfully updated."
+    redirect_to movie_path(@movie)
+  else
+    render 'edit' # note, 'edit' template can access @movie's field values!
+  end
  end
  def destroy
   @movie = Movie.find(params[:id])
